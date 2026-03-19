@@ -1,0 +1,6 @@
+[.layout-basic]
+== Mehrsprachigkeit
+
+* es2015-i18n-tag
+* react-i18next
+

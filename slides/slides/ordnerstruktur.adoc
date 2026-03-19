@@ -1,0 +1,50 @@
+[.layout-basic]
+== Ordnerstruktur
+
+[,bash]
+----
+/api/           # HTTP Clients
+/app/
+  /routes/
+/components/
+  /atoms/
+  /molecules/
+  /organisms/
+  /pages/
+  /templates/
+/hooks/
+/platform/
+/styles/
+/main.tsx
+----
+
+[.layout-basic]
+=== Größere Anwendungen
+
+[,bash]
+----
+/api/
+/app/
+  /routes/
+/modules/
+  /(module)/
+    /routes/
+    /components/
+      /atoms/
+      /molecules/
+      /organisms/
+      /pages/
+      /templates/
+
+/shared/
+  /components/
+    /atoms/
+    /molecules/
+    /organisms/
+    /pages/
+    /templates/
+  /hooks/
+/platform/
+/styles/
+/main.tsx
+----

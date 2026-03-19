@@ -1,0 +1,65 @@
+<script type="application/javascript">
+    const hecLogoUrl = './images/hec-logo.jpg';
+    const hecLogoWhiteUrl = './images/media/image7.png';
+    const neustaFamilyUrl = './images/media/image2.png';
+    const stripesUrl = './images/media/image4.png';
+    const titleImageUrl = './images/media/image5.jpeg';
+
+    document.querySelectorAll('.hec-title-slide').forEach(titleSlide => {
+        const children = [...titleSlide.children];
+        const content = document.createElement('div');
+        content.className = 'hec-title-slide__content';
+        const container = titleSlide.insertBefore(content, titleSlide.firstChild);
+        container.append(...children);
+
+        addImage(titleSlide, hecLogoUrl, 'hec-logo')
+        addImage(titleSlide, stripesUrl, 'stripes')
+        addImage(titleSlide, titleImageUrl, 'title-image')
+        addHecUrl(titleSlide);
+    });
+
+    document.querySelectorAll('.layout-basic').forEach(slide => {
+        const children = [...slide.children];
+        const content = document.createElement('div');
+        content.className = 'layout-basic__content';
+        const container = slide.insertBefore(content, slide.firstChild);
+        container.append(...children);
+
+        addImage(slide, hecLogoUrl, 'hec-logo')
+    });
+
+    document.querySelectorAll('.layout-image').forEach(slide => {
+        const children = [...slide.children];
+        const content = document.createElement('div');
+        content.className = 'layout-image__content';
+        const container = slide.insertBefore(content, slide.firstChild);
+        container.append(...children);
+
+        addImage(slide, hecLogoWhiteUrl, 'hec-logo')
+        addHecUrl(slide);
+    });
+
+    const neustaFamily = new Image();
+    neustaFamily.src = neustaFamilyUrl;
+    neustaFamily.className = 'neusta-family';
+
+    document.querySelectorAll('.slides section:not(.stack):not(.layout-image)').forEach(slide => {
+        console.log(slide);
+        slide.appendChild(neustaFamily.cloneNode(true));
+    });
+
+    function addImage(parent, url, className = '') {
+        const image = new Image()
+        image.src = url;
+        image.className = className;
+        parent.appendChild(image);
+    }
+
+    function addHecUrl(titleSlide) {
+        const hecUrl = document.createElement('a');
+        hecUrl.href = 'https://www.hec.de';
+        hecUrl.textContent = 'hec.de'
+        hecUrl.className = 'hec-url';
+        titleSlide.appendChild(hecUrl);
+    }
+</script>

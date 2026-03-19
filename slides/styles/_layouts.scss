@@ -1,0 +1,158 @@
+$paddingLeft: 64px;
+
+.backgrounds {
+  display: none !important;
+}
+
+.reveal section {
+  height: 100%;
+
+  .neusta-family {
+    height: 30px;
+    position: absolute;
+    margin: 0;
+    bottom: 32px;
+    left: $paddingLeft;
+  }
+}
+
+.hec-title-slide {
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    height: 90%;
+    padding-left: $paddingLeft;
+  }
+
+  .preamble {
+    font-size: 0.8em;
+  }
+
+  .byline {
+    font-size: 0.7em;
+    color: $lightBrown;
+  }
+
+  .hec-logo {
+    width: 250px;
+    position: absolute;
+    margin: 0;
+    top: 32px;
+    left: $paddingLeft;
+  }
+
+  .hec-url {
+    position: absolute;
+    font-size: 0.8em;
+    right: 128px;
+    top: 48px;
+    color: $hecBrown;
+    font-weight: bold;
+  }
+
+  .stripes {
+    height: 40%;
+    position: absolute;
+    margin: 0;
+    bottom: 0;
+    right: 0;
+  }
+
+  .title-image {
+    position: absolute;
+    right: 0;
+    top: 10%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    width: 50%;
+  }
+}
+
+.layout-basic {
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 90%;
+  }
+
+  .slide-content {
+    width: min(60%, 1000px);
+    margin: 32px auto;
+  }
+
+  .hec-logo {
+    width: 250px;
+    position: absolute;
+    margin: 0;
+    top: 32px;
+    right: $paddingLeft;
+  }
+}
+
+.columns.layout-basic .slide-content {
+  width: calc(100% - 2 * #{$paddingLeft});
+}
+
+
+.layout-image {
+  --r-heading-color: white;
+
+  h2 {
+    z-index: 1;
+  }
+
+  .slide-content {
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: 0;
+      object-fit: cover;
+      width: 100vw;
+      height: 100vh;
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 90%;
+  }
+
+  .hec-logo {
+    width: 250px;
+    position: absolute;
+    margin: 0;
+    top: 32px;
+    left: $paddingLeft;
+  }
+
+  .hec-url {
+    position: absolute;
+    font-size: 0.8em;
+    right: 128px;
+    top: 48px;
+    color: white;
+    font-weight: bold;
+  }
+}
+
+.olist {
+  text-align: start;
+}
+
+@media print {
+  .hec-url, .hec-logo, .neusta-family, .hec-title-slide .title-image, .hec-title-slide .stripes {
+    display: none !important;
+  }
+}

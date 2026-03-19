@@ -1,0 +1,36 @@
+:doctitle: React Workshop
+:subtitle: Basics der App-Entwicklung mit Flutter
+:author: Max Jöhnk <maximilian.joehnk@hec.de>
+:date: 2026-03-23
+:icons: font
+:revealjs_customtheme: styles.css
+:revealjs_hash: true
+:revealjs_fragmentInURL: true
+:revealjs_slideNumber: h/v
+:revealjs_transitionSpeed: fast
+:revealjs_plugin_highlight: enabled
+:imagesdir: images
+:docinfo: shared
+:revealjs_disablelayout: true
+:source-highlighter: highlight.js
+:highlightjs-languages: dart
+:highlightjs-theme: styles/intellij-light.css
+// :highlightjs-theme: styles/darcula.css
+// :highlightjs-theme: styles/monokai-sublime.css
+
+:toc:
+
+[.hec-title-slide]
+= React Workshop
+
+Web Entwicklung mit React
+
+include::slides/infrastruktur.adoc[]
+include::slides/ordnerstruktur.adoc[]
+include::slides/routing.adoc[]
+include::slides/mehrsprachigkeit.adoc[]
+include::slides/oidc.adoc[]
+include::slides/testing.adoc[]
+include::slides/formulare.adoc[]
+include::slides/data-loading.adoc[]
+include::slides/storybook.adoc[]

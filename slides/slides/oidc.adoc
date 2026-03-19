@@ -1,0 +1,5 @@
+[.layout-basic]
+== Authentifizierung mit OIDC
+
+* oidc-spa
+

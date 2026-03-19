@@ -1,0 +1,6 @@
+[.layout-basic]
+== State Management
+
+* redux
+* mobx
+

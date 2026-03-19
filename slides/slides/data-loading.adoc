@@ -1,0 +1,57 @@
+[.layout-basic]
+== Data Loading
+
+
+[.layout-basic]
+=== Basic
+
+[,typescript]
+----
+const Basic = () => {
+  const [isLoading, setLoading] = useState(false);
+  const [data, setData] = useState();
+  const [error, setError] = useState();
+
+  useEffect(() => {
+    setLoading(true);
+    fetch('/api/issues')
+      .then(res => res.json())
+      .then(d => setData(d))
+      .catch(err => setError(err))
+      .finally(() => setLoading(false))
+  });
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (error != null) {
+    return <p>Ein Fehler ist aufgetreten.</p>
+  }
+
+  return <div>{data.map(...)}</div>
+};
+----
+
+[.layout-basic]
+=== TanStack Query
+
+[,typescript]
+----
+const ReactQuery = () => {
+  const { data, isPending, error } = useQuery({
+    queryKey: ['issues'],
+    queryFn: () => fetch('/api/issues').then(res => res.json())
+  })
+
+  if (isPending) {
+    return <Spinner />;
+  }
+
+  if (error != null) {
+    return <p>Ein Fehler ist aufgetreten.</p>
+  }
+
+  return <div>{data.map(...)}</div>
+};
+----

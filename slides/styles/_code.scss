@@ -1,0 +1,21 @@
+$additionalCodeBlockWidth: 16px;
+
+.reveal pre.code-wrapper {
+  border-radius: 16px;
+}
+
+.reveal code.hljs {
+  border-radius: 16px;
+  padding: 16px 32px;
+  font-family: "Fira Code", monospace;
+  font-optical-sizing: auto;
+}
+
+.reveal code.hljs {
+  max-height: 60vh;
+}
+
+.olist .code-wrapper {
+  margin: var(--r-block-margin) -$additionalCodeBlockWidth;
+  width: calc(100% + #{2 * $additionalCodeBlockWidth});
+}

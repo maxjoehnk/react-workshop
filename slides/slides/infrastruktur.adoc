@@ -1,0 +1,6 @@
+[.layout-basic]
+== Infrastruktur
+
+* Vite als Bundler
+* Typescript
+

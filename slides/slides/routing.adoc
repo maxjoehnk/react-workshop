@@ -1,0 +1,20 @@
+[.layout-basic]
+== Routing
+
+[.layout-basic]
+=== react-router
+
+[,tsx,highlight]
+----
+    <></>
+----
+
+
+[.layout-basic]
+=== tanstack-router
+
+[,tsx,highlight]
+----
+    <></>
+----
+

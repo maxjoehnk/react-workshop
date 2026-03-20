@@ -1,0 +1,9 @@
+[.layout-basic]
+== UI Libraries
+
+https://mui.com/material-ui/getting-started/[MaterialUI]
+
+https://ui.shadcn.com[Shad/CN] - Beliebt bei neuen Projekten, gute a11y, basiert auf tailwind & radix, components leben im repo und können über cli aktualisiert werden
+
+https://heroui.com[HeroUI] - basiert ebenfalls auf tailwind & radix, aber klassischere component library
+

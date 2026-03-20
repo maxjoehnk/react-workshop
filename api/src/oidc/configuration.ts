@@ -10,7 +10,7 @@ export const oidcConfiguration: Configuration = {
       application_type: "web" as const,
       grant_types: ["authorization_code", "refresh_token"],
       response_types: ["code"],
-      redirect_uris: ["http://localhost:5173/oidc-callback"],
+      redirect_uris: ["http://localhost:5173/"],
       post_logout_redirect_uris: ["http://localhost:5173"],
     },
   ],

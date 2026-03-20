@@ -1,5 +1,35 @@
 [.layout-basic]
 == Formulare
 
+Plain JS/React - für einfache formulare
 
+https://react-hook-form.com[react-hook-form] - für alles größere
 
+[.layout-basic]
+=== react-hook-form
+
+[,typescript]
+----
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { zIssueCreateInput } from '../../../api/zod.gen.ts';
+
+export const IssueForm = ({ onSave, onCancel }) => {
+	const { register, handleSubmit, formState: { errors } } = useForm({
+		resolver: zodResolver(zIssueCreateInput)
+	})
+
+	return <form onSubmit={handleSubmit(onSave)}>
+		<input {...register('title')} />
+		<select {...register('priority')}>
+			<option value="low">low</option>
+			<option value="medium">medium</option>
+			<option value="high">high</option>
+		</select>
+		<div>
+			<button onClick={() => onCancel()} type="button">Cancel</Button>
+			<button type="submit">Create</Button>
+		</div>
+	</form>
+}
+----

@@ -1,6 +1,57 @@
 [.layout-basic]
 == Testing
 
-* vitest
-* testing-library
+https://vitest.dev[vitest]
 
+https://testing-library.com/docs/react-testing-library/intro[testing-library]
+
+[%auto-animate]
+[.layout-basic]
+=== Testing
+
+[,typescript]
+----
+import { screen, render } from '@testing-library/react';
+import { IssueType, IssueTypeName } from './issue-type-name.tsx';
+
+describe('IssueTypeName', () => {
+	test.each([
+		[IssueType.Story, 'Story'],
+		[IssueType.Bug, 'Fehler'],
+	])('should translate issue type', (issueType: IssueType, expected: string) => {
+		render(<IssueTypeName issueType={issueType} />);
+
+		expect(screen.getByText(expected)).toBeInTheDocument();
+	});
+});
+----
+
+[%auto-animate]
+[.layout-basic]
+=== Testing
+
+[,typescript]
+----
+import UserActions from './user-actions.tsx';
+import { render, screen } from '@testing-library/react';
+import { userEvent } from '@testing-library/user-event';
+
+describe('UserActions', () => {
+	test('clicking Delete should call onDelete', async () => {
+		const callback = vi.fn();
+		render(<UserActions onDelete={callback} />);
+
+		await userEvent.click(screen.getByText('Löschen'));
+
+		expect(callback).toHaveBeenCalledOnce();
+	});
+});
+----
+
+[%auto-animate]
+[.layout-basic]
+=== Testing
+
+https://vitest.dev/guide/browser/why.html[Browser Mode]
+
+https://vitest.dev/api/browser/react.html[vitest-browser-react]

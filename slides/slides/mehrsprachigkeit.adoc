@@ -1,6 +1,80 @@
 [.layout-basic]
 == Mehrsprachigkeit
 
-* es2015-i18n-tag
-* react-i18next
+http://i18n-tag.kolmer.net[es2015-i18n-tag]
+
+https://react.i18next.com[react-i18next]
+
+[.layout-basic]
+=== es2015-i18n-tag
+
+[,typescript,highlight=3-5]
+----
+import { i18n } from "es2015-i18n-tag"
+
+const Translated = ({ data }) => {
+  return <div>{i18n`Translated content for ${data}`}</div>;
+}
+----
+
+[.layout-basic]
+=== es2015-i18n-tag
+
+[,typescript,highlight=3-6]
+----
+import { i18n } from "es2015-i18n-tag"
+
+const Translated = ({ date }) => {
+  /* Next Appointment: 23.03.2026 */
+  return <div>{i18n`Next Appointment: ${date}:t(d)`}</div>;
+}
+----
+
+
+[.layout-basic]
+=== es2015-i18n-tag
+
+* Einfach
+* i18n & l10n (date, currency etc)
+* Keine Unterstützung für nested react components
+* Out of Support
+
+[.layout-basic]
+=== react-i18next
+
+[,typescript]
+----
+const Translated = ({ data }) => {
+  const [t] = useTranslation();
+
+  return <div>{t('Translated content for {{data}}', { data })}</div>;
+}
+----
+
+[.layout-basic]
+=== react-i18next
+
+[,typescript]
+----
+const Translated = ({ date }) => {
+  const [t] = useTranslation();
+
+  /* Next Appointment: 23.03.2026 */
+  return <div>{t('Next Appointment: {{date, datetime}}', {
+    date,
+    formatParams: {
+      date: { dateStyle: 'short' }
+    }
+  })}</div>;
+};
+----
+
+
+[.layout-basic]
+=== react-i18next
+
+* Unterstützung für nested react components
+* Supported & weit verbreitet
+* Gute Toolunterstützung & Library Ökosystem
+* Optionale starke typisierung
 

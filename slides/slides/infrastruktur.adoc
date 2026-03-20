@@ -1,6 +1,31 @@
 [.layout-basic]
 == Infrastruktur
 
-* Vite als Bundler
-* Typescript
+https://vite.dev[Vite]
 
+https://react.dev/learn/react-compiler[React Compiler]
+
+https://www.typescriptlang.org[Typescript]
+
+[,shell]
+----
+npm create vite@latest -- -t react-compiler-ts
+----
+
+[.layout-basic]
+=== Vite Proxy
+
+vite.config.ts
+[,typescript,highlight=5-9]
+----
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  plugins: [],
+	server: {
+		proxy: {
+			'/api': 'http://localhost:3001',
+		}
+	}
+})
+----

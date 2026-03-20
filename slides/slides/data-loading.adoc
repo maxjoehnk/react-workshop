@@ -1,6 +1,9 @@
 [.layout-basic]
 == Data Loading
 
+https://tanstack.com/query/latest[TanStack Query/react-query]
+
+https://heyapi.dev/openapi-ts/get-started[hey-api/openapi-ts]
 
 [.layout-basic]
 === Basic
@@ -55,3 +58,5 @@ const ReactQuery = () => {
   return <div>{data.map(...)}</div>
 };
 ----
+
+

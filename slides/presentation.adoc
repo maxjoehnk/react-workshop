@@ -13,7 +13,7 @@
 :docinfo: shared
 :revealjs_disablelayout: true
 :source-highlighter: highlight.js
-:highlightjs-languages: dart
+:highlightjs-languages: typescript, javascript
 :highlightjs-theme: styles/intellij-light.css
 // :highlightjs-theme: styles/darcula.css
 // :highlightjs-theme: styles/monokai-sublime.css
@@ -25,12 +25,16 @@
 
 Web Entwicklung mit React
 
-include::slides/infrastruktur.adoc[]
+include::slides/react-basics.adoc[]
 include::slides/ordnerstruktur.adoc[]
+include::slides/infrastruktur.adoc[]
 include::slides/routing.adoc[]
-include::slides/mehrsprachigkeit.adoc[]
-include::slides/oidc.adoc[]
-include::slides/testing.adoc[]
-include::slides/formulare.adoc[]
 include::slides/data-loading.adoc[]
+include::slides/oidc.adoc[]
+include::slides/formulare.adoc[]
+include::slides/mehrsprachigkeit.adoc[]
+include::slides/testing.adoc[]
+include::slides/state-management.adoc[]
 include::slides/storybook.adoc[]
+include::slides/dependency-injection.adoc[]
+include::slides/ui-libraries.adoc[]

@@ -1,0 +1,221 @@
+[.layout-basic]
+== Basics
+
+View-Library, kein Framework
+
+Kein Routing, Forms, i18n included
+
+[%auto-animate]
+[.layout-basic]
+=== Basics
+
+[,typescript, highlight=3-5]
+----
+import { createRoot } from 'react-dom/client';
+
+const App = () => <h1>Hello World</h1>
+
+createRoot(document.getElementById('root')).render(<App />)
+----
+
+[%auto-animate]
+[.layout-basic]
+=== JSX
+
+HTML in JavaScript
+
+[%auto-animate]
+[.layout-basic]
+=== JSX
+
+[,typescript]
+----
+import { Footer } from './footer.tsx'
+
+export const App = ({ links }) => {
+	const title = "hello workshop";
+
+	return <div className="app">
+		<h1>{title}</h1>
+		{links.map(l => <a href={link.url} key={link.url}>{link.label}</a>)}
+		<button onClick={() => alert("Callback")}>Press Me</button>
+		<Footer />
+	</div>;
+}
+----
+
+[%auto-animate]
+[.layout-basic]
+=== JSX
+
+Standard HTML Elemente alle verfügbar
+
+Standard HTML Attribute & Properties verfügbar
+
+Ausnahme: `class` => `className`
+
+EventHandler mit `on`-Prefix (onClick, onChange, ...)
+
+[.layout-basic]
+=== Componenten
+
+Class Components (deprecated)
+
+Function Components
+
+[.layout-basic]
+=== Class Components
+
+[,typescript]
+----
+export class App extends Component {
+	render() {
+		return <p>Hello Component</p>
+	}
+}
+----
+
+[%auto-animate]
+[.layout-basic]
+=== Function Components
+
+[,typescript]
+----
+export function App() {
+	return <p>Hello Component</p>
+}
+----
+
+[,typescript]
+----
+export const App = () => <p>Hello Component</p>
+----
+
+[.layout-basic]
+=== Props
+
+[,typescript,highlight=3-]
+----
+import { FC } from 'react';
+
+export interface AppProps {
+	title: string;
+	onClick: () => void;
+}
+
+export const App: FC<AppProps> = ({ title, onClick }) => {
+	return <button onClick={onClick}>{title}</button>
+}
+
+const Usage = () =>
+	<App title="I'm a prop" onClick={() => alert("")} />
+----
+
+[%auto-animate]
+[.layout-basic]
+=== Props
+
+Data flows down
+
+Actions go up
+
+[.layout-basic]
+=== Hooks
+
+State & Side Effects für Functional Components
+
+[%auto-animate]
+[.layout-basic]
+=== Hooks
+
+[,typescript]
+----
+const Counter = () => {
+	let count = 0;
+
+	return <div>
+		<p>Count: {count}</p>
+		<button onClick={() => count += 1}>Increase</button>
+	</div>
+}
+----
+
+[%auto-animate]
+[.layout-basic]
+=== Hooks
+
+[,typescript,highlight="1,4,8"]
+----
+import { useState } from 'react';
+
+const Counter = () => {
+	const [count, setCount] = useState(0)
+
+	return <div>
+		<p>Count: {count}</p>
+		<button onClick={() => setCount(count + 1)}>Increase</button>
+	</div>
+}
+----
+
+[%auto-animate]
+[.layout-basic]
+=== Hooks
+
+[,typescript]
+----
+import { useState, useEffect } from 'react';
+
+const Fetch = () => {
+	const [data, setData] = useState(null);
+
+	useEffect(() => {
+		fetch('/api')
+			.then(res => res.json())
+			.then(setData)
+	}, [])
+
+	return <div>{data}</div>
+}
+----
+
+
+[%auto-animate]
+[.layout-basic]
+=== Hooks
+
+useState - Storage
+
+useEffect - Side Effects
+
+https://react.dev/reference/react/hooks[Weitere Hooks]
+
+[.layout-basic]
+=== Context
+
+[,typescript]
+----
+export const AuthContext = createContext<AuthState>({})
+----
+
+[,typescript]
+----
+import { AuthContext } from './auth-context'
+
+const App = () => {
+	const state = { ... };
+
+	return <AuthContext value={state}>{...}</AuthContext>;
+}
+----
+
+[,typescript]
+----
+import { AuthContext } from './auth-context'
+
+const Header = () => {
+	const authState = useContext(AuthContext)
+
+	return <span>{authState.user}</span>
+}
+----

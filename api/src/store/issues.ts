@@ -1,36 +1,26 @@
 import { v4 as uuidv4 } from "uuid";
+import { z } from "zod";
+import {
+  IssueSchema,
+  IssueCreateInputSchema,
+  IssueUpdateInputSchema,
+  AttachmentMetaSchema,
+} from "../schemas/issues.js";
 
-export type IssuePriority = "low" | "medium" | "high";
-export type IssueStatus = "open" | "in_progress" | "closed";
+export type IssuePriority = z.infer<typeof IssueSchema>["priority"];
+export type IssueStatus = z.infer<typeof IssueSchema>["status"];
 
-export interface Attachment {
-  id: string;
-  filename: string;
-  mimetype: string;
-  size: number;
+export type AttachmentMeta = z.infer<typeof AttachmentMetaSchema>;
+export interface Attachment extends AttachmentMeta {
   data: Buffer;
-  createdAt: string;
 }
 
-export interface Issue {
-  id: string;
-  title: string;
-  description: string;
-  status: IssueStatus;
-  priority: IssuePriority;
-  assignee: string | null;
-  createdBy: string;
-  createdAt: string;
-  updatedAt: string;
+export type Issue = Omit<z.infer<typeof IssueSchema>, "attachments"> & {
   attachments: Attachment[];
-}
+};
 
-export type IssueCreateInput = Pick<Issue, "title" | "description"> &
-  Partial<Pick<Issue, "priority" | "assignee">>;
-
-export type IssueUpdateInput = Partial<
-  Pick<Issue, "title" | "description" | "status" | "priority" | "assignee">
->;
+export type IssueCreateInput = z.infer<typeof IssueCreateInputSchema>;
+export type IssueUpdateInput = z.infer<typeof IssueUpdateInputSchema>;
 
 const issues = new Map<string, Issue>();
 

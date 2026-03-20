@@ -1,0 +1,50 @@
+[.layout-basic]
+== Dependency Injection
+
+https://inversify.io[Inversify]
+
+[%auto-animate]
+[.layout-basic]
+=== Dependency Injection
+
+[,typescript]
+----
+import { Container, injectable, Newable, ServiceIdentifier } from 'inversify';
+
+export const defaultContainer = new Container();
+
+export function Provide<T>(token?: ServiceIdentifier) {
+	return (target: Newable<T>) => {
+		if (token == null) {
+			defaultContainer.bind(target).toSelf();
+		} else {
+			defaultContainer.bind(token).to(target);
+		}
+		return injectable()(target);
+	};
+}
+
+export function Singleton<T>() {
+	return (target: Newable<T>) => {
+		defaultContainer.bind(target).toSelf().inSingletonScope();
+		return injectable()(target);
+	};
+}
+----
+
+[%auto-animate]
+[.layout-basic]
+=== Dependency Injection
+
+[,typescript]
+----
+import { useMemo } from 'react';
+import { defaultContainer } from './ioc-container';
+import { ServiceIdentifier } from 'inversify';
+
+export function useService<T>(type: ServiceIdentifier<T>): T {
+	return useMemo(() => defaultContainer.get<T>(type), [type]);
+}
+----
+
+

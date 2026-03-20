@@ -30,6 +30,11 @@ export function findAccountById(id: string): Account | undefined {
   return accounts.find((a) => a.id === id);
 }
 
+export function searchAccounts(query: string): Account[] {
+  const lower = query.toLowerCase();
+  return accounts.filter((a) => a.name.toLowerCase().includes(lower));
+}
+
 export const accountStore = {
   findAccount(_ctx: unknown, id: string) {
     const account = findAccountById(id);

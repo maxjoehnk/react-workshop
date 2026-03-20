@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import type Provider from "oidc-provider";
+import { accountStore } from "../oidc/account.js";
 
 export interface AuthUser {
   sub: string;
@@ -48,13 +49,9 @@ export function createAuthMiddleware(provider: Provider | null) {
       };
 
       // Try to enrich with account claims
-      const account = await provider.Account.findAccount(
-        undefined as any,
-        accessToken.accountId,
-        accessToken,
-      );
+      const account = accountStore.findAccount(undefined, accessToken.accountId);
       if (account) {
-        const claims = await account.claims("userinfo", "openid email profile", {}, []);
+        const claims = await account.claims();
         req.user = { ...req.user, ...claims };
       }
 

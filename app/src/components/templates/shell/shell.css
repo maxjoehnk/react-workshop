@@ -1,0 +1,10 @@
+.shell {
+	display: flex;
+	flex-direction: column;
+}
+
+.shell__toolbar {
+	display: flex;
+	flex-direction: row;
+	gap: 8px;
+}

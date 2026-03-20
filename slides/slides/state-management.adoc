@@ -1,6 +1,54 @@
 [.layout-basic]
 == State Management
 
-* redux
-* mobx
+https://redux.js.org[redux]
+
+https://mobx.js.org/README.html[mobx]
+
+https://zustand.docs.pmnd.rs/learn/getting-started/introduction[Zustand]
+
+
+[.layout-basic]
+=== Mobx
+
+[,typescript]
+----
+class TodoState {
+	todos: Todo[] = []
+
+	constructor() {
+		makeAutoObservable(this)
+	}
+
+  async fetchTodos() {
+		const result = await loadTodos();
+		runInAction(() => {
+			this.todos = result;
+		});
+	}
+
+	addTodo(todo: Todo) {
+		this.todos.push(todo)
+	}
+}
+----
+
+[%auto-animate]
+[.layout-basic]
+=== Mobx
+
+[,typescript]
+----
+import { observer } from "mobx-react-lite"
+
+const App = observer(({ todosState }) => {
+	useEffect(() => {
+		todosState.fetchTodos();
+	}, []);
+
+	return <div>
+		{todosState.todos.map(todo => <TodoItem todo={todo} />)}
+	</div>
+});
+----
 

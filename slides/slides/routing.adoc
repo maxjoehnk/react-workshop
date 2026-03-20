@@ -1,20 +1,53 @@
 [.layout-basic]
 == Routing
 
+https://reactrouter.com/home[React Router]
+
+https://tanstack.com/router/latest[TanStack Router]
+
+
 [.layout-basic]
 === react-router
 
-[,tsx,highlight]
+[,typescript,highlight]
 ----
-    <></>
+<Routes>
+  <Route index element={<Home />} />
+  <Route path="about" element={<About />} />
+
+  <Route element={<AuthLayout />}>
+    <Route path="login" element={<Login />} />
+    <Route path="register" element={<Register />} />
+  </Route>
+
+  <Route path="concerts">
+    <Route index element={<ConcertsHome />} />
+    <Route path=":city" element={<City />} />
+    <Route path="trending" element={<Trending />} />
+  </Route>
+</Routes>
+
 ----
 
 
 [.layout-basic]
 === tanstack-router
 
-[,tsx,highlight]
+File based routing
+
+[,shell]
 ----
-    <></>
+/src/routes/
+  /concerts/
+		/index.tsx
+		/$city.tsx
+		/trending.tsx
+	/__root.tsx
+	/index.tsx
+	/about.tsx
+	/login.tsx
+	/register.tsx
+
 ----
+
 

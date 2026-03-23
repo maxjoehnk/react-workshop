@@ -1,3 +1,6 @@
-.issue-list {
-	margin: 16px;
+.issue-list__placeholder {
+	display: flex;
+	flex-direction: column;
+	padding: 16px;
+	gap: 24px;
 }

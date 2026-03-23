@@ -6,6 +6,7 @@ export type ClientOptions = {
 
 export type Issue = {
     id: string;
+    key: string;
     title: string;
     description: string;
     status: IssueStatus;
@@ -15,6 +16,7 @@ export type Issue = {
     createdAt: string;
     updatedAt: string;
     attachments: Array<AttachmentMeta>;
+    subtasks: Array<Subtask>;
 };
 
 export type IssueStatus = 'open' | 'in_progress' | 'closed';
@@ -29,11 +31,24 @@ export type AttachmentMeta = {
     createdAt: string;
 };
 
+export type Subtask = {
+    id: string;
+    title: string;
+    description: string;
+    done: boolean;
+};
+
 export type IssueCreateInput = {
     title: string;
     description: string;
     priority?: IssuePriority;
     assignee?: string;
+    subtasks?: Array<SubtaskCreateInput>;
+};
+
+export type SubtaskCreateInput = {
+    title: string;
+    description: string;
 };
 
 export type IssueUpdateInput = {
@@ -45,6 +60,22 @@ export type IssueUpdateInput = {
 };
 
 export type Error = {
+    error: string;
+};
+
+export type ValidationError = {
+    error: string;
+    details?: Array<{
+        field: string;
+        message: string;
+    }>;
+};
+
+export type UnauthorizedError = {
+    error: string;
+};
+
+export type NotFoundError = {
     error: string;
 };
 
@@ -65,7 +96,7 @@ export type ListIssuesErrors = {
     /**
      * Unauthorized
      */
-    401: Error;
+    401: UnauthorizedError;
 };
 
 export type ListIssuesError = ListIssuesErrors[keyof ListIssuesErrors];
@@ -90,11 +121,11 @@ export type CreateIssueErrors = {
     /**
      * Validation error
      */
-    400: Error;
+    400: ValidationError;
     /**
      * Unauthorized
      */
-    401: Error;
+    401: UnauthorizedError;
 };
 
 export type CreateIssueError = CreateIssueErrors[keyof CreateIssueErrors];
@@ -121,11 +152,11 @@ export type DeleteIssueErrors = {
     /**
      * Unauthorized
      */
-    401: Error;
+    401: UnauthorizedError;
     /**
      * Issue not found
      */
-    404: Error;
+    404: NotFoundError;
 };
 
 export type DeleteIssueError = DeleteIssueErrors[keyof DeleteIssueErrors];
@@ -152,11 +183,11 @@ export type GetIssueErrors = {
     /**
      * Unauthorized
      */
-    401: Error;
+    401: UnauthorizedError;
     /**
      * Issue not found
      */
-    404: Error;
+    404: NotFoundError;
 };
 
 export type GetIssueError = GetIssueErrors[keyof GetIssueErrors];
@@ -183,11 +214,11 @@ export type UpdateIssueErrors = {
     /**
      * Unauthorized
      */
-    401: Error;
+    401: UnauthorizedError;
     /**
      * Issue not found
      */
-    404: Error;
+    404: NotFoundError;
 };
 
 export type UpdateIssueError = UpdateIssueErrors[keyof UpdateIssueErrors];
@@ -216,15 +247,15 @@ export type UploadAttachmentErrors = {
     /**
      * No file uploaded
      */
-    400: Error;
+    400: ValidationError;
     /**
      * Unauthorized
      */
-    401: Error;
+    401: UnauthorizedError;
     /**
      * Issue not found
      */
-    404: Error;
+    404: NotFoundError;
 };
 
 export type UploadAttachmentError = UploadAttachmentErrors[keyof UploadAttachmentErrors];
@@ -252,11 +283,11 @@ export type DeleteAttachmentErrors = {
     /**
      * Unauthorized
      */
-    401: Error;
+    401: UnauthorizedError;
     /**
      * Attachment not found
      */
-    404: Error;
+    404: NotFoundError;
 };
 
 export type DeleteAttachmentError = DeleteAttachmentErrors[keyof DeleteAttachmentErrors];
@@ -284,11 +315,11 @@ export type DownloadAttachmentErrors = {
     /**
      * Unauthorized
      */
-    401: Error;
+    401: UnauthorizedError;
     /**
      * Attachment not found
      */
-    404: Error;
+    404: NotFoundError;
 };
 
 export type DownloadAttachmentError = DownloadAttachmentErrors[keyof DownloadAttachmentErrors];
@@ -318,7 +349,7 @@ export type SearchUsersErrors = {
     /**
      * Unauthorized
      */
-    401: Error;
+    401: UnauthorizedError;
 };
 
 export type SearchUsersError = SearchUsersErrors[keyof SearchUsersErrors];

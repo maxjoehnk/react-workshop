@@ -14,3 +14,10 @@ export const Default: Story = {
 		issues: new Array(5).fill({ title: 'Sample Issue' })
 	}
 };
+
+export const Loading: Story = {
+	args: {
+		loading: true,
+		issues: []
+	}
+};

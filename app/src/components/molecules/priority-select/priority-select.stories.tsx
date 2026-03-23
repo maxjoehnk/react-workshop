@@ -10,6 +10,6 @@ type Story = StoryObj<typeof PrioritySelect>;
 
 export const Default: Story = {
 	args: {
-		label: "Priority"
+		label: "Priority",
 	}
 };

@@ -1,53 +1,57 @@
 import { type FC, useState } from 'react';
-import type { ChangeHandler, RefCallBack } from 'react-hook-form';
-import { Autocomplete, CircularProgress, TextField } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
-import { searchUsersOptions } from '../../../api/@tanstack/react-query.gen.ts';
+import { useSearchUsersQuery } from '../../../api/@tanstack/react-query.gen.ts';
+import { Autocomplete, EmptyState, FieldError, Label, ListBox, SearchField, Spinner } from '@heroui/react';
+import { useController } from 'react-hook-form';
+import type { Lens } from '@hookform/lenses';
 
 export interface UserAutocompleteProps {
 	label: string;
-	onChange?: ChangeHandler;
-	onBlur?: ChangeHandler;
-	ref?: RefCallBack;
-	name?: string;
-	required?: boolean;
-	disabled?: boolean;
-	error?: boolean;
+	lens: Lens<string | undefined>;
 }
 
-export const UserAutocomplete: FC<UserAutocompleteProps> = ({ label, ...props }) => {
+export const UserAutocomplete: FC<UserAutocompleteProps> = ({ label, lens }) => {
+	const { field, fieldState } = useController(lens.interop());
 	const [searchQuery, setSearchQuery] = useState('')
 
-	const { isLoading, data } = useQuery({
-		...searchUsersOptions({
-			query: {
-				q: searchQuery
-			}
-		}),
-		enabled: searchQuery.length > 2,
+	// TODO: debounce
+	// TODO: only enable for query length > 2
+	const { isLoading, data } = useSearchUsersQuery({
+		query: {
+			q: searchQuery
+		}
+		// enabled: searchQuery.length > 2,
 	});
 
-	return <Autocomplete
-		options={data ?? []}
-		onInputChange={(_, value) => setSearchQuery(value)}
-		filterOptions={x => x}
-		loading={isLoading}
-		getOptionLabel={user => user.name}
-		renderInput={params => <TextField
-			{...params}
-			label={label}
-			slotProps={{
-				input: {
-					...params.InputProps,
-					endAdornment: (
-						<>
-							{isLoading ? <CircularProgress color="inherit" size={20}/> : null}
-							{params.InputProps.endAdornment}
-						</>
-					),
-				},
-			}}
-		/>}
-		{...props}
-	/>;
+	return <Autocomplete selectionMode="single" value={field.value} onChange={field.onChange} onBlur={field.onBlur} isInvalid={fieldState.invalid}>
+		<Label>{label}</Label>
+		<Autocomplete.Trigger>
+			<Autocomplete.Value/>
+			<Autocomplete.ClearButton aria-label="Clear Assignee"/>
+			<Autocomplete.Indicator/>
+		</Autocomplete.Trigger>
+		<Autocomplete.Popover>
+			<Autocomplete.Filter inputValue={searchQuery} onInputChange={setSearchQuery}>
+				<SearchField autoFocus name="search" variant="secondary">
+					<SearchField.Group>
+						<SearchField.SearchIcon/>
+						<SearchField.Input placeholder="Search characters..."/>
+						{isLoading && <Spinner size="sm"/>}
+						<SearchField.ClearButton/>
+					</SearchField.Group>
+				</SearchField>
+				<ListBox
+					items={data}
+					renderEmptyState={() => <EmptyState>No results found</EmptyState>}
+				>
+					{(item) => (
+						<ListBox.Item id={item.id} textValue={item.name}>
+							{item.name}
+							<ListBox.ItemIndicator/>
+						</ListBox.Item>
+					)}
+				</ListBox>
+			</Autocomplete.Filter>
+		</Autocomplete.Popover>
+		<FieldError>{fieldState.error?.message}</FieldError>
+	</Autocomplete>
 }

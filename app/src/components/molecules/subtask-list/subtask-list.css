@@ -1,12 +1,12 @@
-.issue-form {
+.subtask-list {
 	display: flex;
 	flex-direction: column;
-	gap: 12px;
+	gap: 16px;
 }
 
-.issue-form__actions {
+.subtask-list__entry {
 	display: flex;
 	flex-direction: row;
-	justify-content: end;
+	align-items: end;
 	gap: 8px;
 }

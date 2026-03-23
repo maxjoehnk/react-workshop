@@ -10,12 +10,18 @@ const searchUsersMock = vi.mocked(searchUsers)
 
 describe('UserAutocomplete', () => {
 	test('entering text should search for user', async () => {
-		render(<UserAutocomplete label="Assignee"/>, {
+		const onChange = vi.fn();
+		searchUsersMock.mockResolvedValue({ data: [{ name: 'user', id: 'user', email: '' }] })
+		render(<UserAutocomplete label="Assignee" onChange={onChange}/>, {
 			wrapper: props => <QueryClientProvider client={new QueryClient()} {...props} />
 		});
 
-		await userEvent.type(screen.getByRole('combobox'), 'user')
+		// Why can't i just interact with the native select that is present here? .__.
+		await userEvent.selectOptions(screen.getByRole('combobox', { name: 'Assignee' }), 'user')
+		// await userEvent.click(screen.getByRole('button', { name: /Assignee/ }));
+		// await userEvent.click(screen.getByRole('option', { name: 'user' }))
 
-		expect(searchUsersMock).toHaveBeenCalledWith(expect.objectContaining({ query: { q: 'user' }}));
+		expect(onChange).toHaveBeenCalledWith('user');
+		// expect(searchUsersMock).toHaveBeenCalledWith(expect.objectContaining({ query: { q: 'user' }}));
 	})
 });

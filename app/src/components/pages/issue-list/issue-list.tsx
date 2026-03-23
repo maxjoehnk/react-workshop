@@ -1,26 +1,35 @@
 import type { FC } from 'react';
 import type { Issue } from '../../../api';
-import { List, ListItem, Typography } from '@mui/material';
 import './issue-list.css';
+import { Description, EmptyState, Label, ListBox, Skeleton } from '@heroui/react';
 
 export interface IssueListProps {
 	loading: boolean
-	issues?: Issue[]
+	issues: Issue[]
 }
 
 export const IssueList: FC<IssueListProps> = ({
 																								issues, loading
 																							}) => {
 	if (loading) {
-		return <></>
+		return <IssueListSkeleton/>
 	}
 
-	issues ??= [];
-
 	return <div className="issue-list">
-		<Typography variant="h4">Backlog</Typography>
-		<List>
-			{issues.map(issue => <ListItem key={issue.id}>{issue.title}</ListItem>)}
-		</List>
+		<h2>Backlog</h2>
+		{issues.length == 0 && <EmptyState>No issues yet</EmptyState>}
+		<ListBox>
+			{issues.map(issue => <ListBox.Item key={issue.id}>
+				<Label>{issue.key}</Label>
+				<Description>{issue.title}</Description>
+			</ListBox.Item>)}
+		</ListBox>
 	</div>
 }
+
+const IssueListSkeleton = () => <div className="issue-list">
+	<h2>Backlog</h2>
+	<div className="issue-list__placeholder">
+		{new Array(5).fill(null).map(() => <Skeleton className="h-4 w-80 rounded"/>)}
+	</div>
+</div>

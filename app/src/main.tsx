@@ -5,7 +5,6 @@ import { routeTree } from './routeTree.gen.ts';
 import { getOidc, OidcInitializationGate } from './oidc.ts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { client } from './api/client.gen.ts';
-import { CssBaseline } from '@mui/material';
 
 const router = createRouter({ routeTree })
 
@@ -17,12 +16,10 @@ const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
 	<StrictMode>
-		<CssBaseline>
-			<OidcInitializationGate>
-				<QueryClientProvider client={queryClient}>
-					<RouterProvider router={router}/>
-				</QueryClientProvider>
-			</OidcInitializationGate>
-		</CssBaseline>
+		<OidcInitializationGate>
+			<QueryClientProvider client={queryClient}>
+				<RouterProvider router={router}/>
+			</QueryClientProvider>
+		</OidcInitializationGate>
 	</StrictMode>,
 )

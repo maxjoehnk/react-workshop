@@ -1,26 +1,30 @@
 import type { FC } from 'react';
-import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
 import { zIssuePriority } from '../../../api/zod.gen.ts';
-import type { ChangeHandler, RefCallBack } from 'react-hook-form';
+import type { Lens } from '@hookform/lenses';
+import type { IssuePriority } from '../../../api';
+import { FieldError, Label, ListBox, Select } from '@heroui/react';
+import { useController } from 'react-hook-form';
 
 export interface PrioritySelectProps {
 	label: string;
-	helperText?: string;
-	onChange?: ChangeHandler;
-	onBlur?: ChangeHandler;
-	ref?: RefCallBack;
-	name?: string;
-	required?: boolean;
-	disabled?: boolean;
-	error?: boolean;
+	lens: Lens<IssuePriority | undefined>
 }
 
-export const PrioritySelect: FC<PrioritySelectProps> = ({ label, helperText, ...props }) => {
-	return <FormControl>
-		<InputLabel id="priority-label">{label}</InputLabel>
-		<Select labelId="priority-label" label={label} aria-describedby="priority-input-message" {...props}>
-			{zIssuePriority.options.map(option => <MenuItem key={option} value={option}>{option}</MenuItem>)}
-		</Select>
-		{helperText && <FormHelperText error={props.error} id="priority-input-message">{helperText}</FormHelperText>}
-	</FormControl>
+export const PrioritySelect: FC<PrioritySelectProps> = ({ label, lens }) => {
+	const {fieldState, field} = useController(lens.interop());
+
+	return <Select {...field} isDisabled={field.disabled} isInvalid={fieldState.error != null}>
+		<Label>{label}</Label>
+		<Select.Trigger>
+			<Select.Value/>
+			<Select.Indicator/>
+		</Select.Trigger>
+		<Select.Popover>
+			<ListBox>
+				{zIssuePriority.options.map(option => <ListBox.Item key={option} id={option} textValue={option}>{option}
+					<ListBox.ItemIndicator/></ListBox.Item>)}
+			</ListBox>
+		</Select.Popover>
+		<FieldError>{fieldState.error?.message}</FieldError>
+	</Select>
 }

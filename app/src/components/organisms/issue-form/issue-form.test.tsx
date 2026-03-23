@@ -13,8 +13,9 @@ describe('IssueForm', () => {
 
 		await userEvent.type(screen.getByRole('textbox', { name: 'Title' }), 'Titel');
 		await userEvent.type(screen.getByRole('textbox', { name: 'Description' }), 'Description');
-		await userEvent.click(screen.getByRole('combobox', { name: 'Priority' }));
-		await userEvent.click(screen.getByText('medium'));
+		// await userEvent.selectOptions(screen.getByRole('listbox', { name: 'Priority' }), 'medium');
+		await userEvent.click(screen.getByRole('button', { name: 'Select an item Priority' }));
+		await userEvent.click(screen.getByRole('option', { name: 'medium' }));
 		await userEvent.click(screen.getByRole('button', { name: 'Create' }));
 
 		expect(onSave).toHaveBeenCalledWith({ title: 'Titel', description: 'Description', priority: 'medium', assignee: '' }, expect.anything());

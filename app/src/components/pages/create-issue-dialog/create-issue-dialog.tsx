@@ -1,9 +1,9 @@
 import { type FC, useCallback } from 'react';
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { IssueForm } from '../../organisms/issue-form/issue-form.tsx';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createIssueMutation } from '../../../api/@tanstack/react-query.gen.ts';
+import { useQueryClient } from '@tanstack/react-query';
+import { useCreateIssueMutation } from '../../../api/@tanstack/react-query.gen.ts';
 import type { IssueCreateInput } from '../../../api';
+import { Dialog } from '../../molecules/dialog/dialog.tsx';
 
 export interface CreateIssueDialogProps {
 	open: boolean;
@@ -12,21 +12,18 @@ export interface CreateIssueDialogProps {
 
 export const CreateIssueDialog: FC<CreateIssueDialogProps> = ({ open, onClose }) => {
 	const queryClient = useQueryClient();
-	const { mutateAsync } = useMutation({
-		...createIssueMutation(), onSuccess: async () => {
-			await queryClient.invalidateQueries({ queryKey: ['issues'] });
+	const { mutateAsync } = useCreateIssueMutation({
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({ queryKey: [{ tags: ['issues'] }] });
+			onClose();
 		}
 	})
 
 	const createIssue = useCallback(async (issue: IssueCreateInput) => {
 		await mutateAsync({ body: issue });
-		onClose();
-	}, [mutateAsync, onClose]);
+	}, [mutateAsync]);
 
-	return <Dialog open={open} onClose={onClose}>
-		<DialogTitle>Create Issue</DialogTitle>
-		<DialogContent>
-			<IssueForm onCancel={onClose} onSave={createIssue}/>
-		</DialogContent>
+	return <Dialog isOpen={open} setIsOpen={onClose} title="Create Issue">
+		<IssueForm onCancel={onClose} onSave={createIssue}/>
 	</Dialog>
 }

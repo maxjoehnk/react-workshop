@@ -22,8 +22,16 @@ export const zAttachmentMeta = z.object({
     createdAt: z.iso.datetime({ local: true })
 });
 
+export const zSubtask = z.object({
+    id: z.uuid(),
+    title: z.string(),
+    description: z.string(),
+    done: z.boolean()
+});
+
 export const zIssue = z.object({
     id: z.uuid(),
+    key: z.string(),
     title: z.string(),
     description: z.string(),
     status: zIssueStatus,
@@ -32,14 +40,21 @@ export const zIssue = z.object({
     createdBy: z.string(),
     createdAt: z.iso.datetime({ local: true }),
     updatedAt: z.iso.datetime({ local: true }),
-    attachments: z.array(zAttachmentMeta)
+    attachments: z.array(zAttachmentMeta),
+    subtasks: z.array(zSubtask)
+});
+
+export const zSubtaskCreateInput = z.object({
+    title: z.string().min(1),
+    description: z.string().min(1)
 });
 
 export const zIssueCreateInput = z.object({
     title: z.string().min(1),
     description: z.string().min(1),
     priority: zIssuePriority.optional(),
-    assignee: z.string().optional()
+    assignee: z.string().optional(),
+    subtasks: z.array(zSubtaskCreateInput).optional()
 });
 
 export const zIssueUpdateInput = z.object({
@@ -51,6 +66,22 @@ export const zIssueUpdateInput = z.object({
 });
 
 export const zError = z.object({
+    error: z.string()
+});
+
+export const zValidationError = z.object({
+    error: z.string(),
+    details: z.array(z.object({
+        field: z.string(),
+        message: z.string()
+    })).optional()
+});
+
+export const zUnauthorizedError = z.object({
+    error: z.string()
+});
+
+export const zNotFoundError = z.object({
     error: z.string()
 });
 

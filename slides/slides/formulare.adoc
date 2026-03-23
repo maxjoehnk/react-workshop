@@ -8,6 +8,11 @@ https://react-hook-form.com[react-hook-form] - für alles größere
 [.layout-basic]
 === react-hook-form
 
+[,shell]
+----
+npm i -S react-hook-form @hookform/resolvers
+----
+
 [,typescript]
 ----
 import { useForm } from 'react-hook-form';
@@ -33,3 +38,4 @@ export const IssueForm = ({ onSave, onCancel }) => {
 	</form>
 }
 ----
+

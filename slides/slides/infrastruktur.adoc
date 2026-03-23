@@ -12,6 +12,8 @@ https://www.typescriptlang.org[Typescript]
 npm create vite@latest -- -t react-compiler-ts
 ----
 
+https://github.com/maxjoehnk/react-workshop
+
 [.layout-basic]
 === Vite Proxy
 

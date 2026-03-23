@@ -1,0 +1,22 @@
+[.layout-basic]
+== Mutations
+
+[,typescript,highlight=6-]
+----
+import { useMutation } from '@tanstack/react-query';
+import { createIssueMutation } from './react-query.gen';
+import { IssueCreateInput } from './issues';
+
+const App = () => {
+	const { mutate } = useMutation(createIssueMutation())
+
+	const onSubmit = (issue: IssueCreateInput) => {
+		mutate({ body: issue })
+	}
+
+	return <form onSubmit={handleSubmit(onSubmit)}>
+    {...}
+  </form>
+}
+----
+

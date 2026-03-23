@@ -8,7 +8,12 @@ import {
   IssueCreateInputSchema,
   IssueUpdateInputSchema,
   AttachmentMetaSchema,
+  SubtaskSchema,
+  SubtaskCreateInputSchema,
   ErrorSchema,
+  ValidationErrorSchema,
+  UnauthorizedErrorSchema,
+  NotFoundErrorSchema,
 } from "./schemas/issues.js";
 
 const registry = new OpenAPIRegistry();
@@ -18,7 +23,12 @@ registry.register("Issue", IssueSchema);
 registry.register("IssueCreateInput", IssueCreateInputSchema);
 registry.register("IssueUpdateInput", IssueUpdateInputSchema);
 registry.register("AttachmentMeta", AttachmentMetaSchema);
+registry.register("Subtask", SubtaskSchema);
+registry.register("SubtaskCreateInput", SubtaskCreateInputSchema);
 registry.register("Error", ErrorSchema);
+registry.register("ValidationError", ValidationErrorSchema);
+registry.register("UnauthorizedError", UnauthorizedErrorSchema);
+registry.register("NotFoundError", NotFoundErrorSchema);
 
 // Register security scheme
 const bearerAuth = registry.registerComponent("securitySchemes", "bearerAuth", {
@@ -38,7 +48,7 @@ registry.registerPath({
   path: "/api/issues",
   operationId: "listIssues",
   summary: "List all issues",
-  tags: ["Issues"],
+  tags: ["issues"],
   security,
   responses: {
     200: {
@@ -49,7 +59,7 @@ registry.registerPath({
     },
     401: {
       description: "Unauthorized",
-      content: { "application/json": { schema: ErrorSchema } },
+      content: { "application/json": { schema: UnauthorizedErrorSchema } },
     },
   },
 });
@@ -59,7 +69,7 @@ registry.registerPath({
   path: "/api/issues",
   operationId: "createIssue",
   summary: "Create an issue",
-  tags: ["Issues"],
+  tags: ["issues"],
   security,
   request: {
     body: {
@@ -73,11 +83,11 @@ registry.registerPath({
     },
     400: {
       description: "Validation error",
-      content: { "application/json": { schema: ErrorSchema } },
+      content: { "application/json": { schema: ValidationErrorSchema } },
     },
     401: {
       description: "Unauthorized",
-      content: { "application/json": { schema: ErrorSchema } },
+      content: { "application/json": { schema: UnauthorizedErrorSchema } },
     },
   },
 });
@@ -87,7 +97,7 @@ registry.registerPath({
   path: "/api/issues/{id}",
   operationId: "getIssue",
   summary: "Get an issue by ID",
-  tags: ["Issues"],
+  tags: ["issues"],
   security,
   request: {
     params: z.object({ id: z.string().uuid() }),
@@ -99,11 +109,11 @@ registry.registerPath({
     },
     401: {
       description: "Unauthorized",
-      content: { "application/json": { schema: ErrorSchema } },
+      content: { "application/json": { schema: UnauthorizedErrorSchema } },
     },
     404: {
       description: "Issue not found",
-      content: { "application/json": { schema: ErrorSchema } },
+      content: { "application/json": { schema: NotFoundErrorSchema } },
     },
   },
 });
@@ -113,7 +123,7 @@ registry.registerPath({
   path: "/api/issues/{id}",
   operationId: "updateIssue",
   summary: "Update an issue",
-  tags: ["Issues"],
+  tags: ["issues"],
   security,
   request: {
     params: z.object({ id: z.string().uuid() }),
@@ -128,11 +138,11 @@ registry.registerPath({
     },
     401: {
       description: "Unauthorized",
-      content: { "application/json": { schema: ErrorSchema } },
+      content: { "application/json": { schema: UnauthorizedErrorSchema } },
     },
     404: {
       description: "Issue not found",
-      content: { "application/json": { schema: ErrorSchema } },
+      content: { "application/json": { schema: NotFoundErrorSchema } },
     },
   },
 });
@@ -142,7 +152,7 @@ registry.registerPath({
   path: "/api/issues/{id}",
   operationId: "deleteIssue",
   summary: "Delete an issue",
-  tags: ["Issues"],
+  tags: ["issues"],
   security,
   request: {
     params: z.object({ id: z.string().uuid() }),
@@ -151,11 +161,11 @@ registry.registerPath({
     204: { description: "Issue deleted" },
     401: {
       description: "Unauthorized",
-      content: { "application/json": { schema: ErrorSchema } },
+      content: { "application/json": { schema: UnauthorizedErrorSchema } },
     },
     404: {
       description: "Issue not found",
-      content: { "application/json": { schema: ErrorSchema } },
+      content: { "application/json": { schema: NotFoundErrorSchema } },
     },
   },
 });
@@ -188,15 +198,15 @@ registry.registerPath({
     },
     400: {
       description: "No file uploaded",
-      content: { "application/json": { schema: ErrorSchema } },
+      content: { "application/json": { schema: ValidationErrorSchema } },
     },
     401: {
       description: "Unauthorized",
-      content: { "application/json": { schema: ErrorSchema } },
+      content: { "application/json": { schema: UnauthorizedErrorSchema } },
     },
     404: {
       description: "Issue not found",
-      content: { "application/json": { schema: ErrorSchema } },
+      content: { "application/json": { schema: NotFoundErrorSchema } },
     },
   },
 });
@@ -225,11 +235,11 @@ registry.registerPath({
     },
     401: {
       description: "Unauthorized",
-      content: { "application/json": { schema: ErrorSchema } },
+      content: { "application/json": { schema: UnauthorizedErrorSchema } },
     },
     404: {
       description: "Attachment not found",
-      content: { "application/json": { schema: ErrorSchema } },
+      content: { "application/json": { schema: NotFoundErrorSchema } },
     },
   },
 });
@@ -251,11 +261,11 @@ registry.registerPath({
     204: { description: "Attachment deleted" },
     401: {
       description: "Unauthorized",
-      content: { "application/json": { schema: ErrorSchema } },
+      content: { "application/json": { schema: UnauthorizedErrorSchema } },
     },
     404: {
       description: "Attachment not found",
-      content: { "application/json": { schema: ErrorSchema } },
+      content: { "application/json": { schema: NotFoundErrorSchema } },
     },
   },
 });
@@ -294,7 +304,7 @@ registry.registerPath({
     },
     401: {
       description: "Unauthorized",
-      content: { "application/json": { schema: ErrorSchema } },
+      content: { "application/json": { schema: UnauthorizedErrorSchema } },
     },
   },
 });

@@ -11,6 +11,22 @@ export const IssueStatusSchema = z
   .enum(["open", "in_progress", "closed"])
   .openapi("IssueStatus");
 
+export const SubtaskSchema = z
+  .object({
+    id: z.string().uuid(),
+    title: z.string(),
+    description: z.string(),
+    done: z.boolean(),
+  })
+  .openapi("Subtask");
+
+export const SubtaskCreateInputSchema = z
+  .object({
+    title: z.string().min(1),
+    description: z.string().min(1),
+  })
+  .openapi("SubtaskCreateInput");
+
 export const AttachmentMetaSchema = z
   .object({
     id: z.string().uuid(),
@@ -24,6 +40,7 @@ export const AttachmentMetaSchema = z
 export const IssueSchema = z
   .object({
     id: z.string().uuid(),
+    key: z.string().openapi({ example: "ISSUE-1" }),
     title: z.string(),
     description: z.string(),
     status: IssueStatusSchema,
@@ -33,6 +50,7 @@ export const IssueSchema = z
     createdAt: z.string().datetime(),
     updatedAt: z.string().datetime(),
     attachments: z.array(AttachmentMetaSchema),
+    subtasks: z.array(SubtaskSchema),
   })
   .openapi("Issue");
 
@@ -42,6 +60,7 @@ export const IssueCreateInputSchema = z
     description: z.string().min(1),
     priority: IssuePrioritySchema.optional(),
     assignee: z.string().optional(),
+    subtasks: z.array(SubtaskCreateInputSchema).optional(),
   })
   .openapi("IssueCreateInput");
 
@@ -60,3 +79,27 @@ export const ErrorSchema = z
     error: z.string(),
   })
   .openapi("Error");
+
+export const ValidationErrorSchema = z
+  .object({
+    error: z.string(),
+    details: z.array(
+      z.object({
+        field: z.string(),
+        message: z.string(),
+      }),
+    ).optional(),
+  })
+  .openapi("ValidationError");
+
+export const UnauthorizedErrorSchema = z
+  .object({
+    error: z.string(),
+  })
+  .openapi("UnauthorizedError");
+
+export const NotFoundErrorSchema = z
+  .object({
+    error: z.string(),
+  })
+  .openapi("NotFoundError");

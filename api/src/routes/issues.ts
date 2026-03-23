@@ -23,13 +23,13 @@ router.get("/:id", (req, res) => {
 
 // POST /api/issues
 router.post("/", (req, res) => {
-  const { title, description, priority, assignee } = req.body;
+  const { title, description, priority, assignee, subtasks } = req.body;
   if (!title || !description) {
     res.status(400).json({ error: "title and description are required" });
     return;
   }
   const issue = issueStore.create(
-    { title, description, priority, assignee },
+    { title, description, priority, assignee, subtasks },
     req.user!.sub,
   );
   res.status(201).json(issue);

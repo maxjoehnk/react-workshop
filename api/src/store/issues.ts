@@ -5,11 +5,13 @@ import {
   IssueCreateInputSchema,
   IssueUpdateInputSchema,
   AttachmentMetaSchema,
+  SubtaskSchema,
 } from "../schemas/issues.js";
 
 export type IssuePriority = z.infer<typeof IssueSchema>["priority"];
 export type IssueStatus = z.infer<typeof IssueSchema>["status"];
 
+export type Subtask = z.infer<typeof SubtaskSchema>;
 export type AttachmentMeta = z.infer<typeof AttachmentMetaSchema>;
 export interface Attachment extends AttachmentMeta {
   data: Buffer;
@@ -17,12 +19,14 @@ export interface Attachment extends AttachmentMeta {
 
 export type Issue = Omit<z.infer<typeof IssueSchema>, "attachments"> & {
   attachments: Attachment[];
+  subtasks: Subtask[];
 };
 
 export type IssueCreateInput = z.infer<typeof IssueCreateInputSchema>;
 export type IssueUpdateInput = z.infer<typeof IssueUpdateInputSchema>;
 
 const issues = new Map<string, Issue>();
+let nextIssueNumber = 1;
 
 export const issueStore = {
   findAll(): Issue[] {
@@ -38,6 +42,7 @@ export const issueStore = {
     const now = new Date().toISOString();
     const issue: Issue = {
       id: uuidv4(),
+      key: `ISSUE-${nextIssueNumber++}`,
       title: input.title,
       description: input.description,
       status: "open",
@@ -46,6 +51,12 @@ export const issueStore = {
       createdBy,
       createdAt: now,
       updatedAt: now,
+      subtasks: (input.subtasks ?? []).map((s) => ({
+        id: uuidv4(),
+        title: s.title,
+        description: s.description,
+        done: false,
+      })),
       attachments: [],
     };
     issues.set(issue.id, issue);

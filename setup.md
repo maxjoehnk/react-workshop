@@ -127,6 +127,7 @@ npm i -S oidc-spa
 ```
 
 `vite.config.ts`
+
 ```typescript
 import { oidcSpa } from 'oidc-spa/vite-plugin'
 
@@ -141,6 +142,7 @@ export default defineConfig({
     oidcSpa(),
   ],
 })
+```
 
 `src/oidc.ts`
 ```typescript

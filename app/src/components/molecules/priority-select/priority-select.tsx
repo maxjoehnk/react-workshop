@@ -1,19 +1,15 @@
 import type { FC } from 'react';
 import { zIssuePriority } from '../../../api/zod.gen.ts';
-import type { Lens } from '@hookform/lenses';
 import type { IssuePriority } from '../../../api';
 import { FieldError, Label, ListBox, Select } from '@heroui/react';
-import { useController } from 'react-hook-form';
+import type { LensFormControlProps } from '../../../platform/forms/lens-form-control.tsx';
 
-export interface PrioritySelectProps {
+export interface PrioritySelectProps extends LensFormControlProps<IssuePriority | undefined> {
 	label: string;
-	lens: Lens<IssuePriority | undefined>
 }
 
-export const PrioritySelect: FC<PrioritySelectProps> = ({ label, lens }) => {
-	const {fieldState, field} = useController(lens.interop());
-
-	return <Select {...field} isDisabled={field.disabled} isInvalid={fieldState.error != null}>
+export const PrioritySelect: FC<PrioritySelectProps> = ({ label, error, ...field }) => {
+	return <Select {...field} isDisabled={field.disabled} isInvalid={error != null}>
 		<Label>{label}</Label>
 		<Select.Trigger>
 			<Select.Value/>
@@ -25,6 +21,6 @@ export const PrioritySelect: FC<PrioritySelectProps> = ({ label, lens }) => {
 					<ListBox.ItemIndicator/></ListBox.Item>)}
 			</ListBox>
 		</Select.Popover>
-		<FieldError>{fieldState.error?.message}</FieldError>
+		<FieldError>{error?.message}</FieldError>
 	</Select>
 }

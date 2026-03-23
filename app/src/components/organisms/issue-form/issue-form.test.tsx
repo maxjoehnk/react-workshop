@@ -18,6 +18,6 @@ describe('IssueForm', () => {
 		await userEvent.click(screen.getByRole('option', { name: 'medium' }));
 		await userEvent.click(screen.getByRole('button', { name: 'Create' }));
 
-		expect(onSave).toHaveBeenCalledWith({ title: 'Titel', description: 'Description', priority: 'medium', assignee: '' }, expect.anything());
+		expect(onSave).toHaveBeenCalledWith({ title: 'Titel', description: 'Description', priority: 'medium', assignee: undefined, subtasks: [] }, expect.anything());
 	})
 });

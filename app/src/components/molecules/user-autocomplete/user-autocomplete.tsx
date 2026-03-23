@@ -1,16 +1,13 @@
 import { type FC, useState } from 'react';
 import { useSearchUsersQuery } from '../../../api/@tanstack/react-query.gen.ts';
 import { Autocomplete, EmptyState, FieldError, Label, ListBox, SearchField, Spinner } from '@heroui/react';
-import { useController } from 'react-hook-form';
-import type { Lens } from '@hookform/lenses';
+import type { LensFormControlProps } from '../../../platform/forms/lens-form-control.tsx';
 
-export interface UserAutocompleteProps {
+export interface UserAutocompleteProps extends LensFormControlProps<string | undefined> {
 	label: string;
-	lens: Lens<string | undefined>;
 }
 
-export const UserAutocomplete: FC<UserAutocompleteProps> = ({ label, lens }) => {
-	const { field, fieldState } = useController(lens.interop());
+export const UserAutocomplete: FC<UserAutocompleteProps> = ({ label, error, ...field }) => {
 	const [searchQuery, setSearchQuery] = useState('')
 
 	// TODO: debounce
@@ -22,7 +19,7 @@ export const UserAutocomplete: FC<UserAutocompleteProps> = ({ label, lens }) => 
 		// enabled: searchQuery.length > 2,
 	});
 
-	return <Autocomplete selectionMode="single" value={field.value} onChange={field.onChange} onBlur={field.onBlur} isInvalid={fieldState.invalid}>
+	return <Autocomplete selectionMode="single" {...field} isInvalid={!!error}>
 		<Label>{label}</Label>
 		<Autocomplete.Trigger>
 			<Autocomplete.Value/>
@@ -52,6 +49,6 @@ export const UserAutocomplete: FC<UserAutocompleteProps> = ({ label, lens }) => 
 				</ListBox>
 			</Autocomplete.Filter>
 		</Autocomplete.Popover>
-		<FieldError>{fieldState.error?.message}</FieldError>
+		<FieldError>{error?.message}</FieldError>
 	</Autocomplete>
 }

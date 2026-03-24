@@ -8,9 +8,9 @@ import type { IssueCreateInput, SubtaskCreateInput } from '../../../api';
 import { SubtaskList } from '../../molecules/subtask-list/subtask-list.tsx';
 import { useLens } from '@hookform/lenses';
 import { DevTool } from '@hookform/devtools';
-import { TextInputFormControl } from '../../atoms/text-input/text-input-form-control.tsx';
-import { PrioritySelectFormControl } from '../../molecules/priority-select/priority-select-form-control.tsx';
-import { UserAutocompleteFormControl } from '../../molecules/user-autocomplete/user-autocomplete-form-control.tsx';
+import { TextInput } from '../../atoms/text-input/text-input.tsx';
+import { PrioritySelect } from '../../molecules/priority-select/priority-select.tsx';
+import { UserAutocomplete } from '../../molecules/user-autocomplete/user-autocomplete.tsx';
 
 export interface IssueFormProps {
 	onSave: (issue: IssueCreateInput) => Promise<unknown>;
@@ -27,10 +27,10 @@ export const IssueForm: FC<IssueFormProps> = ({ onSave, onCancel }) => {
 	const lens = useLens({ control })
 
 	return <Form className="issue-form" onSubmit={handleSubmit(onSave)}>
-		<TextInputFormControl lens={lens.focus('title')} label="Title" />
-		<TextInputFormControl lens={lens.focus('description')} label="Description" />
-		<PrioritySelectFormControl lens={lens.focus('priority')} label="Priority" />
-		<UserAutocompleteFormControl label="Assignee" lens={lens.focus('assignee')} />
+		<TextInput lens={lens.focus('title')} label="Title" />
+		<TextInput lens={lens.focus('description')} label="Description" />
+		<PrioritySelect lens={lens.focus('priority')} label="Priority" />
+		<UserAutocomplete label="Assignee" lens={lens.focus('assignee')} />
 		<SubtaskList lens={lens.focus('subtasks').cast<SubtaskCreateInput[]>()} />
 
 		<div className="issue-form__actions">

@@ -11,7 +11,7 @@ const searchUsersMock = vi.mocked(searchUsers)
 describe('UserAutocomplete', () => {
 	test('entering text should search for user', async () => {
 		const onChange = vi.fn();
-		searchUsersMock.mockResolvedValue({ data: [{ name: 'user', id: 'user', email: '' }] })
+		searchUsersMock.mockResolvedValue({ data: [{ name: 'user', id: 'user', email: '' }], request: null as never, response: null as never })
 		render(<UserAutocomplete label="Assignee" onChange={onChange}/>, {
 			wrapper: props => <QueryClientProvider client={new QueryClient()} {...props} />
 		});

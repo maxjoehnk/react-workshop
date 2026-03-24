@@ -57,6 +57,10 @@ export const issueStore = {
         description: s.description,
         done: false,
       })),
+      versions: {
+        affectedVersion: input.versions?.affectedVersion ?? "",
+        fixVersion: input.versions?.fixVersion ?? "",
+      },
       attachments: [],
     };
     issues.set(issue.id, issue);

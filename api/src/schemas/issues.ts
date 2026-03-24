@@ -37,6 +37,20 @@ export const AttachmentMetaSchema = z
   })
   .openapi("AttachmentMeta");
 
+export const IssueVersionsSchema = z
+  .object({
+    affectedVersion: z.string(),
+    fixVersion: z.string(),
+  })
+  .openapi("IssueVersions");
+
+export const IssueVersionsInputSchema = z
+  .object({
+    affectedVersion: z.string().optional(),
+    fixVersion: z.string().optional(),
+  })
+  .openapi("IssueVersionsInput");
+
 export const IssueSchema = z
   .object({
     id: z.string().uuid(),
@@ -51,6 +65,7 @@ export const IssueSchema = z
     updatedAt: z.string().datetime(),
     attachments: z.array(AttachmentMetaSchema),
     subtasks: z.array(SubtaskSchema),
+    versions: IssueVersionsSchema,
   })
   .openapi("Issue");
 
@@ -60,7 +75,8 @@ export const IssueCreateInputSchema = z
     description: z.string().min(1),
     priority: IssuePrioritySchema.optional(),
     assignee: z.string().optional(),
-    subtasks: z.array(SubtaskCreateInputSchema).optional(),
+    subtasks: z.array(SubtaskCreateInputSchema),
+    versions: IssueVersionsInputSchema,
   })
   .openapi("IssueCreateInput");
 
@@ -71,6 +87,7 @@ export const IssueUpdateInputSchema = z
     status: IssueStatusSchema.optional(),
     priority: IssuePrioritySchema.optional(),
     assignee: z.string().optional(),
+    versions: IssueVersionsInputSchema.optional(),
   })
   .openapi("IssueUpdateInput");
 

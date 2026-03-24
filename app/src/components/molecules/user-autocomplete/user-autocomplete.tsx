@@ -1,33 +1,13 @@
 import { type FC, useState } from 'react';
 import { useSearchUsersQuery } from '../../../api/@tanstack/react-query.gen.ts';
 import { Autocomplete, EmptyState, FieldError, Label, ListBox, SearchField, Spinner } from '@heroui/react';
-import {
-	isLens,
-	type UseOptionalLensProps,
-	type WithLens,
-	type WithoutLens
-} from '../../../platform/forms/lens-form-control.tsx';
-import { useController } from 'react-hook-form';
+import type { FormControl } from '../../../platform/forms/form-control.tsx';
 
-export interface UserAutocompleteProps {
+export interface UserAutocompleteProps extends FormControl<string | undefined> {
 	label: string;
 }
 
-export const UserAutocomplete: FC<UserAutocompleteProps & UseOptionalLensProps<string | undefined>> = ({ label, ...props }) => {
-	if (isLens(props)) {
-		return <LensUserAutocomplete lens={props.lens} label={label}/>
-	}
-
-	return <InternalUserAutocomplete label={label} {...props} />
-};
-
-const LensUserAutocomplete: FC<UserAutocompleteProps & WithLens<string | undefined>> = ({ lens, label }) => {
-	const { field, fieldState } = useController(lens.interop());
-
-	return <InternalUserAutocomplete label={label} {...field} error={fieldState.error}/>
-}
-
-const InternalUserAutocomplete: FC<UserAutocompleteProps & WithoutLens<string | undefined>> = ({
+export const UserAutocomplete: FC<UserAutocompleteProps> = ({
 																																																 label,
 																																																 error,
 																																																 ...field
@@ -47,7 +27,7 @@ const InternalUserAutocomplete: FC<UserAutocompleteProps & WithoutLens<string | 
 		<Label>{label}</Label>
 		<Autocomplete.Trigger>
 			<Autocomplete.Value/>
-			<Autocomplete.ClearButton aria-label="Clear Assignee"/>
+			<Autocomplete.ClearButton aria-label={`Clear Assignee`}/>
 			<Autocomplete.Indicator/>
 		</Autocomplete.Trigger>
 		<Autocomplete.Popover>

@@ -1,31 +1,12 @@
 import type { FC, ReactNode } from 'react';
 import { FieldError, Input, Label, TextField } from '@heroui/react';
-import {
-	isLens,
-	type UseOptionalLensProps,
-	type WithLens, type WithoutLens
-} from '../../../platform/forms/lens-form-control.tsx';
-import { useController } from 'react-hook-form';
+import type { FormControl } from '../../../platform/forms/form-control.tsx';
 
-export interface TextInputProps {
+export interface TextInputProps extends FormControl<string> {
 	label: ReactNode;
 }
 
-export const TextInput: FC<TextInputProps & UseOptionalLensProps<string>> = ({ label, ...props }) => {
-	if (isLens(props)) {
-		return <LensTextInput lens={props.lens} label={label}/>
-	}
-
-	return <InternalTextInput label={label} {...props} />
-};
-
-const LensTextInput: FC<TextInputProps & WithLens<string>> = ({ lens, label }) => {
-	const { field, fieldState } = useController(lens.interop());
-
-	return <InternalTextInput label={label} {...field} error={fieldState.error} />
-}
-
-const InternalTextInput: FC<TextInputProps & WithoutLens<string>> = ({ label, error, ...props }) => {
+export const TextInput: FC<TextInputProps> = ({ label, error, ...props }) => {
 	return (
 		<TextField isInvalid={!!error}>
 			<Label>{label}</Label>

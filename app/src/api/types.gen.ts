@@ -17,6 +17,7 @@ export type Issue = {
     updatedAt: string;
     attachments: Array<AttachmentMeta>;
     subtasks: Array<Subtask>;
+    versions: IssueVersions;
 };
 
 export type IssueStatus = 'open' | 'in_progress' | 'closed';
@@ -38,17 +39,28 @@ export type Subtask = {
     done: boolean;
 };
 
+export type IssueVersions = {
+    affectedVersion: string;
+    fixVersion: string;
+};
+
 export type IssueCreateInput = {
     title: string;
     description: string;
     priority?: IssuePriority;
     assignee?: string;
-    subtasks?: Array<SubtaskCreateInput>;
+    subtasks: Array<SubtaskCreateInput>;
+    versions: IssueVersionsInput;
 };
 
 export type SubtaskCreateInput = {
     title: string;
     description: string;
+};
+
+export type IssueVersionsInput = {
+    affectedVersion?: string;
+    fixVersion?: string;
 };
 
 export type IssueUpdateInput = {
@@ -57,6 +69,7 @@ export type IssueUpdateInput = {
     status?: IssueStatus;
     priority?: IssuePriority;
     assignee?: string;
+    versions?: IssueVersionsInput;
 };
 
 export type Error = {

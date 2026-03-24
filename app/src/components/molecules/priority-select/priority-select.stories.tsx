@@ -6,7 +6,7 @@ const meta = {
 } satisfies Meta<typeof PrioritySelect>
 
 export default meta;
-type Story = StoryObj<typeof PrioritySelect>;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {

@@ -2,34 +2,13 @@ import type { FC } from 'react';
 import { zIssuePriority } from '../../../api/zod.gen.ts';
 import type { IssuePriority } from '../../../api';
 import { FieldError, Label, ListBox, Select } from '@heroui/react';
-import {
-	isLens,
-	type UseOptionalLensProps,
-	type WithLens,
-	type WithoutLens
-} from '../../../platform/forms/lens-form-control.tsx';
-import { useController } from 'react-hook-form';
+import type { FormControl } from '../../../platform/forms/form-control.tsx';
 
-export interface PrioritySelectProps {
+export interface PrioritySelectProps extends FormControl<IssuePriority | undefined> {
 	label: string;
 }
 
-export const PrioritySelect: FC<PrioritySelectProps & UseOptionalLensProps<IssuePriority | undefined>> = ({ label, ...props }) => {
-	if (isLens(props)) {
-		return <LensPrioritySelect lens={props.lens} label={label}/>
-	}
-
-	return <InternalPrioritySelect label={label} {...props} />
-}
-
-const LensPrioritySelect: FC<PrioritySelectProps & WithLens<IssuePriority | undefined>> = ({ lens, label }) => {
-	const { field, fieldState } = useController(lens.interop());
-
-	return <InternalPrioritySelect label={label} {...field} error={fieldState.error} />
-}
-
-
-const InternalPrioritySelect: FC<PrioritySelectProps & WithoutLens<IssuePriority | undefined>> = ({ label, error, ...field }) => {
+export const PrioritySelect: FC<PrioritySelectProps> = ({ label, error, ...field }) => {
 	return <Select {...field} isDisabled={field.disabled} isInvalid={error != null}>
 		<Label>{label}</Label>
 		<Select.Trigger>

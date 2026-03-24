@@ -12,9 +12,7 @@ export default defineConfig({
 		},
 		{
 			name: 'zod',
-			dates: {
-				local: true
-			}
+			responses: false,
 		},
 		{
 			name: '@hey-api/client-fetch',

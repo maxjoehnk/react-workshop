@@ -19,7 +19,7 @@ export const zAttachmentMeta = z.object({
     filename: z.string(),
     mimetype: z.string(),
     size: z.int(),
-    createdAt: z.iso.datetime({ local: true })
+    createdAt: z.iso.datetime()
 });
 
 export const zSubtask = z.object({
@@ -27,6 +27,11 @@ export const zSubtask = z.object({
     title: z.string(),
     description: z.string(),
     done: z.boolean()
+});
+
+export const zIssueVersions = z.object({
+    affectedVersion: z.string(),
+    fixVersion: z.string()
 });
 
 export const zIssue = z.object({
@@ -38,10 +43,11 @@ export const zIssue = z.object({
     priority: zIssuePriority,
     assignee: z.string().nullable(),
     createdBy: z.string(),
-    createdAt: z.iso.datetime({ local: true }),
-    updatedAt: z.iso.datetime({ local: true }),
+    createdAt: z.iso.datetime(),
+    updatedAt: z.iso.datetime(),
     attachments: z.array(zAttachmentMeta),
-    subtasks: z.array(zSubtask)
+    subtasks: z.array(zSubtask),
+    versions: zIssueVersions
 });
 
 export const zSubtaskCreateInput = z.object({
@@ -49,12 +55,18 @@ export const zSubtaskCreateInput = z.object({
     description: z.string().min(1)
 });
 
+export const zIssueVersionsInput = z.object({
+    affectedVersion: z.string().optional(),
+    fixVersion: z.string().optional()
+});
+
 export const zIssueCreateInput = z.object({
     title: z.string().min(1),
     description: z.string().min(1),
     priority: zIssuePriority.optional(),
     assignee: z.string().optional(),
-    subtasks: z.array(zSubtaskCreateInput).optional()
+    subtasks: z.array(zSubtaskCreateInput),
+    versions: zIssueVersionsInput
 });
 
 export const zIssueUpdateInput = z.object({
@@ -62,7 +74,8 @@ export const zIssueUpdateInput = z.object({
     description: z.string().optional(),
     status: zIssueStatus.optional(),
     priority: zIssuePriority.optional(),
-    assignee: z.string().optional()
+    assignee: z.string().optional(),
+    versions: zIssueVersionsInput.optional()
 });
 
 export const zError = z.object({
@@ -97,21 +110,11 @@ export const zListIssuesData = z.object({
     query: z.never().optional()
 });
 
-/**
- * A list of issues
- */
-export const zListIssuesResponse = z.array(zIssue);
-
 export const zCreateIssueData = z.object({
     body: zIssueCreateInput.optional(),
     path: z.never().optional(),
     query: z.never().optional()
 });
-
-/**
- * The created issue
- */
-export const zCreateIssueResponse = zIssue;
 
 export const zDeleteIssueData = z.object({
     body: z.never().optional(),
@@ -121,11 +124,6 @@ export const zDeleteIssueData = z.object({
     query: z.never().optional()
 });
 
-/**
- * Issue deleted
- */
-export const zDeleteIssueResponse = z.void();
-
 export const zGetIssueData = z.object({
     body: z.never().optional(),
     path: z.object({
@@ -134,11 +132,6 @@ export const zGetIssueData = z.object({
     query: z.never().optional()
 });
 
-/**
- * The issue
- */
-export const zGetIssueResponse = zIssue;
-
 export const zUpdateIssueData = z.object({
     body: zIssueUpdateInput.optional(),
     path: z.object({
@@ -146,11 +139,6 @@ export const zUpdateIssueData = z.object({
     }),
     query: z.never().optional()
 });
-
-/**
- * The updated issue
- */
-export const zUpdateIssueResponse = zIssue;
 
 export const zUploadAttachmentData = z.object({
     body: z.object({
@@ -162,11 +150,6 @@ export const zUploadAttachmentData = z.object({
     query: z.never().optional()
 });
 
-/**
- * The created attachment metadata
- */
-export const zUploadAttachmentResponse = zAttachmentMeta;
-
 export const zDeleteAttachmentData = z.object({
     body: z.never().optional(),
     path: z.object({
@@ -175,11 +158,6 @@ export const zDeleteAttachmentData = z.object({
     }),
     query: z.never().optional()
 });
-
-/**
- * Attachment deleted
- */
-export const zDeleteAttachmentResponse = z.void();
 
 export const zDownloadAttachmentData = z.object({
     body: z.never().optional(),
@@ -190,11 +168,6 @@ export const zDownloadAttachmentData = z.object({
     query: z.never().optional()
 });
 
-/**
- * The attachment file
- */
-export const zDownloadAttachmentResponse = z.string();
-
 export const zSearchUsersData = z.object({
     body: z.never().optional(),
     path: z.never().optional(),
@@ -202,8 +175,3 @@ export const zSearchUsersData = z.object({
         q: z.string().optional()
     }).optional()
 });
-
-/**
- * A list of matching users
- */
-export const zSearchUsersResponse = z.array(zUser);

@@ -186,7 +186,7 @@ createRoot(document.getElementById('root')!).render(
 ## Setup testing
 
 ```shell
-npm i -D vitest jsdom @testing-library/react @testing-library/dom @types/react @types/react-dom
+npm i -D vitest jsdom @testing-library/react @testing-library/dom @testing-library/jest-dom @types/react @types/react-dom
 ```
 
 ## Setup Storybook

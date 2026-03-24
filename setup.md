@@ -15,7 +15,6 @@ npm i -S @tanstack/react-router
 npm i -D @tanstack/router-plugin
 mkdir -p src/routes
 touch src/routes/__root.tsx src/routes/index.tsx
-rm src/App.tsx src/App.css
 ```
 
 `vite.config.ts`
@@ -52,6 +51,10 @@ createRoot(document.getElementById('root')!).render(
 		<RouterProvider router={router} />
 	</StrictMode>,
 )
+```
+
+```shell
+rm src/App.tsx src/App.css
 ```
 
 ## Setup client generation

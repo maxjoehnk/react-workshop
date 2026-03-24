@@ -170,6 +170,49 @@ registry.registerPath({
   },
 });
 
+// --- Validation routes ---
+
+const TitleValidationResponseSchema = z
+  .object({
+    title: z.string(),
+    available: z.boolean(),
+  })
+  .openapi("TitleValidationResponse");
+
+registry.register("TitleValidationResponse", TitleValidationResponseSchema);
+
+registry.registerPath({
+  method: "get",
+  path: "/api/issues/validate/title",
+  operationId: "validateIssueTitle",
+  summary: "Check if an issue title is unique",
+  description:
+    "Returns whether the given title is available (not yet used by another issue). Useful for async form validation.",
+  tags: ["issues"],
+  security,
+  request: {
+    query: z.object({
+      title: z.string().min(1).openapi({ description: "The issue title to check" }),
+    }),
+  },
+  responses: {
+    200: {
+      description: "Title availability result",
+      content: {
+        "application/json": { schema: TitleValidationResponseSchema },
+      },
+    },
+    400: {
+      description: "Missing title parameter",
+      content: { "application/json": { schema: ErrorSchema } },
+    },
+    401: {
+      description: "Unauthorized",
+      content: { "application/json": { schema: UnauthorizedErrorSchema } },
+    },
+  },
+});
+
 // --- Attachment routes ---
 
 registry.registerPath({

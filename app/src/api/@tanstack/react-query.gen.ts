@@ -3,8 +3,8 @@
 import { queryOptions, useMutation, type UseMutationOptions, useQuery } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { createIssue, deleteAttachment, deleteIssue, downloadAttachment, getIssue, listIssues, type Options, searchUsers, updateIssue, uploadAttachment } from '../sdk.gen';
-import type { CreateIssueData, CreateIssueError, CreateIssueResponse, DeleteAttachmentData, DeleteAttachmentError, DeleteAttachmentResponse, DeleteIssueData, DeleteIssueError, DeleteIssueResponse, DownloadAttachmentData, DownloadAttachmentError, DownloadAttachmentResponse, GetIssueData, GetIssueError, GetIssueResponse, ListIssuesData, ListIssuesError, ListIssuesResponse, SearchUsersData, SearchUsersError, SearchUsersResponse, UpdateIssueData, UpdateIssueError, UpdateIssueResponse, UploadAttachmentData, UploadAttachmentError, UploadAttachmentResponse } from '../types.gen';
+import { createIssue, deleteAttachment, deleteIssue, downloadAttachment, getIssue, listIssues, type Options, searchUsers, updateIssue, uploadAttachment, validateIssueTitle } from '../sdk.gen';
+import type { CreateIssueData, CreateIssueError, CreateIssueResponse, DeleteAttachmentData, DeleteAttachmentError, DeleteAttachmentResponse, DeleteIssueData, DeleteIssueError, DeleteIssueResponse, DownloadAttachmentData, DownloadAttachmentError, DownloadAttachmentResponse, GetIssueData, GetIssueError, GetIssueResponse, ListIssuesData, ListIssuesError, ListIssuesResponse, SearchUsersData, SearchUsersError, SearchUsersResponse, UpdateIssueData, UpdateIssueError, UpdateIssueResponse, UploadAttachmentData, UploadAttachmentError, UploadAttachmentResponse, ValidateIssueTitleData, ValidateIssueTitleError, ValidateIssueTitleResponse } from '../types.gen';
 
 export type QueryKey<TOptions extends Options> = [
     Pick<TOptions, 'baseUrl' | 'body' | 'headers' | 'path' | 'query'> & {
@@ -150,6 +150,33 @@ export const updateIssueMutation = (options?: Partial<Options<UpdateIssueData>>)
  * Update an issue
  */
 export const useUpdateIssueMutation = (mutationOptions?: Partial<Omit<UseMutationOptions<UpdateIssueResponse, UpdateIssueError, Options<UpdateIssueData>>, 'mutationFn'>>) => useMutation({ ...updateIssueMutation(), ...mutationOptions });
+
+export const validateIssueTitleQueryKey = (options: Options<ValidateIssueTitleData>) => createQueryKey('validateIssueTitle', options, false, ['issues']);
+
+/**
+ * Check if an issue title is unique
+ *
+ * Returns whether the given title is available (not yet used by another issue). Useful for async form validation.
+ */
+const validateIssueTitleOptions = (options: Options<ValidateIssueTitleData>) => queryOptions<ValidateIssueTitleResponse, ValidateIssueTitleError, ValidateIssueTitleResponse, ReturnType<typeof validateIssueTitleQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await validateIssueTitle({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: validateIssueTitleQueryKey(options)
+});
+
+/**
+ * Check if an issue title is unique
+ *
+ * Returns whether the given title is available (not yet used by another issue). Useful for async form validation.
+ */
+export const useValidateIssueTitleQuery = (options: Options<ValidateIssueTitleData>) => useQuery(validateIssueTitleOptions(options));
 
 /**
  * Upload an attachment to an issue

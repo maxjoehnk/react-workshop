@@ -6,6 +6,21 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 const router = Router();
 
+// GET /api/issues/validate/title?title=...
+router.get("/validate/title", async (req, res) => {
+  const title = typeof req.query.title === "string" ? req.query.title.trim() : "";
+  if (!title) {
+    res.status(400).json({ error: "title query parameter is required" });
+    return;
+  }
+
+  const exists = issueStore
+    .findAll()
+    .some((issue) => issue.title.toLowerCase() === title.toLowerCase());
+
+  res.json({ title, available: !exists });
+});
+
 // GET /api/issues
 router.get("/", (_req, res) => {
   res.json(issueStore.findAll());

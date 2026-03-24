@@ -2,8 +2,8 @@
 
 import { type Client, formDataBodySerializer, type Options as Options2, type TDataShape } from './client';
 import { client } from './client.gen';
-import type { CreateIssueData, CreateIssueErrors, CreateIssueResponses, DeleteAttachmentData, DeleteAttachmentErrors, DeleteAttachmentResponses, DeleteIssueData, DeleteIssueErrors, DeleteIssueResponses, DownloadAttachmentData, DownloadAttachmentErrors, DownloadAttachmentResponses, GetIssueData, GetIssueErrors, GetIssueResponses, ListIssuesData, ListIssuesErrors, ListIssuesResponses, SearchUsersData, SearchUsersErrors, SearchUsersResponses, UpdateIssueData, UpdateIssueErrors, UpdateIssueResponses, UploadAttachmentData, UploadAttachmentErrors, UploadAttachmentResponses } from './types.gen';
-import { zCreateIssueData, zDeleteAttachmentData, zDeleteIssueData, zDownloadAttachmentData, zGetIssueData, zListIssuesData, zSearchUsersData, zUpdateIssueData, zUploadAttachmentData } from './zod.gen';
+import type { CreateIssueData, CreateIssueErrors, CreateIssueResponses, DeleteAttachmentData, DeleteAttachmentErrors, DeleteAttachmentResponses, DeleteIssueData, DeleteIssueErrors, DeleteIssueResponses, DownloadAttachmentData, DownloadAttachmentErrors, DownloadAttachmentResponses, GetIssueData, GetIssueErrors, GetIssueResponses, ListIssuesData, ListIssuesErrors, ListIssuesResponses, SearchUsersData, SearchUsersErrors, SearchUsersResponses, UpdateIssueData, UpdateIssueErrors, UpdateIssueResponses, UploadAttachmentData, UploadAttachmentErrors, UploadAttachmentResponses, ValidateIssueTitleData, ValidateIssueTitleErrors, ValidateIssueTitleResponses } from './types.gen';
+import { zCreateIssueData, zDeleteAttachmentData, zDeleteIssueData, zDownloadAttachmentData, zGetIssueData, zListIssuesData, zSearchUsersData, zUpdateIssueData, zUploadAttachmentData, zValidateIssueTitleData } from './zod.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -75,6 +75,18 @@ export const updateIssue = <ThrowOnError extends boolean = false>(options: Optio
         'Content-Type': 'application/json',
         ...options.headers
     }
+});
+
+/**
+ * Check if an issue title is unique
+ *
+ * Returns whether the given title is available (not yet used by another issue). Useful for async form validation.
+ */
+export const validateIssueTitle = <ThrowOnError extends boolean = false>(options: Options<ValidateIssueTitleData, ThrowOnError>) => (options.client ?? client).get<ValidateIssueTitleResponses, ValidateIssueTitleErrors, ThrowOnError>({
+    requestValidator: async (data) => await zValidateIssueTitleData.parseAsync(data),
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/issues/validate/title',
+    ...options
 });
 
 /**

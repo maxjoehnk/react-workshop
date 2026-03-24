@@ -98,6 +98,11 @@ export const zNotFoundError = z.object({
     error: z.string()
 });
 
+export const zTitleValidationResponse = z.object({
+    title: z.string(),
+    available: z.boolean()
+});
+
 export const zUser = z.object({
     id: z.string(),
     name: z.string(),
@@ -138,6 +143,14 @@ export const zUpdateIssueData = z.object({
         id: z.uuid()
     }),
     query: z.never().optional()
+});
+
+export const zValidateIssueTitleData = z.object({
+    body: z.never().optional(),
+    path: z.never().optional(),
+    query: z.object({
+        title: z.string().min(1)
+    })
 });
 
 export const zUploadAttachmentData = z.object({

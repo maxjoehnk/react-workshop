@@ -1,10 +1,10 @@
-import type { FC } from 'react';
+import { type FC } from 'react';
 import { useController, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { zIssueCreateInput } from '../../../api/zod.gen.ts';
 import { Button, Form } from '@heroui/react';
 import './issue-form.css';
-import type { IssueCreateInput } from '../../../api';
+import { type IssueCreateInput, validateIssueTitle } from '../../../api';
 import { SubtaskList } from '../../molecules/subtask-list/subtask-list.tsx';
 import { useLens } from '@hookform/lenses';
 import { DevTool } from '@hookform/devtools';
@@ -12,6 +12,8 @@ import { TextInput } from '../../atoms/text-input/text-input.tsx';
 import { PrioritySelect } from '../../molecules/priority-select/priority-select.tsx';
 import { z } from 'zod';
 import { IssueVersions } from '../../molecules/issue-versions/issue-versions.tsx';
+import { UserAutocomplete } from '../../molecules/user-autocomplete/user-autocomplete.tsx';
+import { useDebounce } from '../../../hooks/use-debounce.ts';
 
 export interface IssueFormProps {
 	onSave: (issue: IssueCreateInput) => Promise<unknown>;
@@ -19,24 +21,41 @@ export interface IssueFormProps {
 }
 
 export const IssueForm: FC<IssueFormProps> = ({ onSave, onCancel }) => {
+	const validate = useDebounce((title: string, signal) =>
+		validateIssueTitle({
+			query: {
+				title
+			},
+			throwOnError: false,
+			signal,
+		}))
 	const { control, handleSubmit } = useForm({
 		resolver: zodResolver(zIssueCreateInput.extend({
-			title: z.string().min(5),
+			title: z.string().refine(async value => {
+				const { data } = await validate(value)
+
+				return data?.available;
+			}, {
+				error: 'Title is already taken',
+			}),
 		})),
 		defaultValues: {
 			subtasks: [],
 			versions: {}
-		}
+		},
+		mode: 'onChange'
 	})
 	const lens = useLens({ control })
 	const titleControl = useController({ control, name: 'title' })
 	const descriptionControl = useController({ control, name: 'description' })
 	const priorityControl = useController({ control, name: 'priority' })
+	const assigneeControl = useController({ control, name: 'assignee' })
 
 	return <Form className="issue-form" onSubmit={handleSubmit(onSave)}>
 		<TextInput label="Title" {...titleControl.field} error={titleControl.fieldState.error}/>
 		<TextInput label="Description" {...descriptionControl.field} error={descriptionControl.fieldState.error}/>
 		<PrioritySelect label="Priority" {...priorityControl.field} error={priorityControl.fieldState.error}/>
+		<UserAutocomplete label="Assignee" {...assigneeControl.field} error={assigneeControl.fieldState.error}/>
 		<IssueVersions lens={lens.focus('versions')}/>
 		<SubtaskList lens={lens.focus('subtasks')}/>
 

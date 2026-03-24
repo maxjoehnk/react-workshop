@@ -92,6 +92,11 @@ export type NotFoundError = {
     error: string;
 };
 
+export type TitleValidationResponse = {
+    title: string;
+    available: boolean;
+};
+
 export type User = {
     id: string;
     name: string;
@@ -244,6 +249,40 @@ export type UpdateIssueResponses = {
 };
 
 export type UpdateIssueResponse = UpdateIssueResponses[keyof UpdateIssueResponses];
+
+export type ValidateIssueTitleData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * The issue title to check
+         */
+        title: string;
+    };
+    url: '/api/issues/validate/title';
+};
+
+export type ValidateIssueTitleErrors = {
+    /**
+     * Missing title parameter
+     */
+    400: Error;
+    /**
+     * Unauthorized
+     */
+    401: UnauthorizedError;
+};
+
+export type ValidateIssueTitleError = ValidateIssueTitleErrors[keyof ValidateIssueTitleErrors];
+
+export type ValidateIssueTitleResponses = {
+    /**
+     * Title availability result
+     */
+    200: TitleValidationResponse;
+};
+
+export type ValidateIssueTitleResponse = ValidateIssueTitleResponses[keyof ValidateIssueTitleResponses];
 
 export type UploadAttachmentData = {
     body?: {
